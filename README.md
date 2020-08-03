@@ -10,11 +10,12 @@ Copyright 2020 &copy; Vitess Authors
     1. [What is VReplication](#what-is-vreplication)
 1. [Terminology and Key Concepts](./misc/concepts.md)
 1. [Common Use Cases](./common-use-cases.md)
-    1. [Adopting Viress](./use-cases/adopting-vitess.md)
+    1. [Adopting Vitess](./use-cases/adopting-vitess.md)
     1. [Vertical Resharding](./use-cases/vertical-resharding.md)
     1. [Horizontal Resharding](./use-cases/horizontal-resharding.md)
     1. [Change Data Capture](./use-cases/change-data-capture.md)
-1. [TBD: Performance and Scalability-](./misc/scalability.md)
+1. [Command Reference](./misc/commands.md)
+1. [TBD: Performance and Scalability](./misc/scalability.md)
 1. [Internals](./misc/internals.md)
 
 ---
@@ -46,12 +47,12 @@ While we will attempt to keep this document in sync with code changes, the docs 
 
 Sharding introduces a whole new set of challenges for SREs and application developers. Traditional tools don’t work well and you end up needing to write and maintain your own toolbox of scripts and bespoke code. VReplication was created to handle many of the standard workflows needed to manage common Day 2 requirements based on experience with very large Vitess clusters containing thousands of mysql instances.
 
-Vreplication is the mechanism within Vitess to transfer data from or to shards. It uses a combination of vstreams to achieve the purpose. Let us look at a couple of examples:
+VReplication is the mechanism within Vitess to transfer data from or to shards. It uses a combination of vstreams to achieve the purpose. Let us look at a couple of examples:
 
 1. _Resharding_ When you ask Vitess to reshard, under the hood it is VReplication which creates vstreams on the VTTablets of the target shards. These streams copy data from the source shards to the target shards with splitting/merging of data as per the old and new sharding configurations
 2. _Change Data Capture_. When you ask VTGate to stream binlogs from keyspaces by invoking the VStream API, VTGate creates appropriate vstreams and combines them.
 
-At one point or the other, most Vitess users will end up using functionality that is provided using Vreplication. Thus Vreplication is a core part of Vitess and understanding it well will help you as you manage and operate Vitess and to also make the most of its features.
+At one point or the other, most Vitess users will end up using functionality that is provided using VReplication. Thus VReplication is a core part of Vitess and understanding it well will help you as you manage and operate Vitess and to also make the most of its features.
 
 VReplication can be used at different levels:
 
