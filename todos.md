@@ -1,8 +1,6 @@
 
 * Internal: Materialize
 
-* Commands: finish TBDs
-
 * Example commands for all with explanation
 
 

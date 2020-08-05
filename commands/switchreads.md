@@ -22,8 +22,8 @@ Parameters:
      that the workflow was successful and user is ready to use the target keyspace now.
      However if, for any reason, we want to abort this workflow using the -reverse flag deletes the
      rules that were setup and vtgate will route the queries to this table to the the source table.
-     There is no way to reverse the use of the -revert flag other than by recreating the routing rules
-     again.
+     There is no way to reverse the use of the -reverse flag other than by recreating the routing rules
+     again using the vtctl ApplyRoutingRules command.
  * *keyspace.workflow*
 
     name of target keyspace and the associated workflow

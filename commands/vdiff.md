@@ -27,7 +27,9 @@ Parameters:
     VDiff will choose a tablet of these types to diff the source table(s) with the target tables
  * *-filtered_replication_wait_time* (default 30s)
 
-     TBD
+     VDiff first chooses a tablet and then, if the tablet is not the master, waits for the tablet to
+     reach the current GTID position of the master. If it takes longer than filtered_replication_wait_time
+     VDiff errors out.
  * *keyspace.workflow*
 
     name of target keyspace and the associated workflow
