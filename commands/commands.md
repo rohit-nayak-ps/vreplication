@@ -22,4 +22,4 @@ will reports on what the particular command will do without actually performing 
     1. [Materialize](./materialize.md)
     1. [VExec](./vexec.md)
     1. [Workflow](./workflow.md)
-    1. [VReplicationExec](./vreplicationexec.md)
+    1. [VReplicationExec](https://vitess.io/docs/reference/features/vreplication/#vreplicationexec)
