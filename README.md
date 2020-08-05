@@ -14,9 +14,10 @@ Copyright 2020 &copy; Vitess Authors
     1. [Vertical Resharding](./use-cases/vertical-resharding.md)
     1. [Horizontal Resharding](./use-cases/horizontal-resharding.md)
     1. [Change Data Capture](./use-cases/change-data-capture.md)
-1. [Command Reference](./misc/commands.md)
+1. [Command Reference](./commands/commands.md)
 1. [TBD: Performance and Scalability](./misc/scalability.md)
 1. [Internals](./misc/internals.md)
+1. [Frequently Asked Questions](./misc/faq.md)
 
 ---
 ### Introduction
