@@ -19,7 +19,7 @@ reads.
 At this point if you are confident you can shutdown your MySQL setup. VReplication gives you the option
 of delaying this choice until you are absolutely sure and are in production for a while.
 
-### Rollback from Vitess
+### Cutover to MySQL
 
 VReplication, by default, creates a *reverse* replication stream by default so that Vitess is continuously
 replicating to the MySQL. So we just need to do a cutover similar to the one we just did above.

@@ -23,7 +23,7 @@ Copyright 2020 &copy; Vitess Authors
 
 In this guide we will be introducing the terminology used while talking about VReplication, giving a few real-life examples where it can be used and also delving into its internals.
 
-VReplication has several use-cases and many of the standard use-cases have advanced usage. The intent is to 
+VReplication has several use-cases and many of the standard use-cases have advanced usage. The intent is to
 first document the more common and popular use-cases.
 
 This document should be considered a work-in-progress documentation. For reasons of agility we provide
@@ -32,6 +32,9 @@ try our best to update these docs to reflect the latest functionality.
 
 Suggestions, Improvements, bug reports/fixes will be gratefully accepted either as pull requests or comments
 in the #vreplication slack channel :-)
+
+This guide is for the "new" v3 VReplication implementation and is not to be confused with the previous workflows (which are
+  now deprecated) like SplitClone and VerticalSplitClone.
 
 ### Intended Audience
 
@@ -56,13 +59,13 @@ At one point or the other, most Vitess users will end up using functionality tha
 
 VReplication can be used at different levels:
 
-* Vitess adopters can use VReplication to migrate their data into Vitess from their current MySQL setup 
+* Vitess adopters can use VReplication to migrate their data into Vitess from their current MySQL setup
 in a risk-free manner.
-VReplication can keep the Vitess installation in sync with their existing setup allowing them to cutover to using Vitess in production 
+VReplication can keep the Vitess installation in sync with their existing setup allowing them to cutover to using Vitess in production
 while retaining the ability to rollback to the existing setup.  
 
 * Existing vitess users can use VReplication for horizontal and vertical resharding, create materialized
-views or aggregated rollups to speed up queries. VReplication also makes it easy to export data to 
+views or aggregated rollups to speed up queries. VReplication also makes it easy to export data to
 Change Data Capture systems like Debezium or data lake implementations.
 
 * Advanced user may also like to use VReplication to backfill lookup indexes or for schema deployment.
