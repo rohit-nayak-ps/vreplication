@@ -1,0 +1,10 @@
+insert into customer(email) values('fred@domain.com');
+insert into customer(email) values('gary@domain.com');
+insert into customer(email) values('hope@domain.com');
+insert into customer(email) values('isabel@domain.com');
+insert into customer(email) values('jack@domain.com');
+insert into corder(customer_id, sku, price) values(6, 'SKU-1001', 100);
+insert into corder(customer_id, sku, price) values(7, 'SKU-1002', 30);
+insert into corder(customer_id, sku, price) values(8, 'SKU-1001', 100);
+insert into corder(customer_id, sku, price) values(1, 'SKU-1002', 30);
+insert into corder(customer_id, sku, price) values(2, 'SKU-1001', 100);

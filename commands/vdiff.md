@@ -33,3 +33,12 @@ Parameters:
  * *keyspace.workflow*
 
     name of target keyspace and the associated workflow
+
+Example:
+
+```
+$ vtctlclient VDiff customer.commerce2customer
+
+Summary for corder: {ProcessedRows:10 MatchingRows:10 MismatchedRows:0 ExtraRowsSource:0 ExtraRowsTarget:0}
+Summary for customer: {ProcessedRows:11 MatchingRows:11 MismatchedRows:0 ExtraRowsSource:0 ExtraRowsTarget:0}
+```

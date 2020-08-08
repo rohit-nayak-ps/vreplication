@@ -12,13 +12,9 @@ Next:
 
 * Related schema tables
 
-* Working adopt example
-
 * Go through code for each command and document special cases, options
 
-
-
-=== POST TRIP
+=== FUTURE
 
 * tribal knowledge (actual use cases, #rows/TBs, #shards, time taken for workflow, vdiff, switchwrites downtimes)
 

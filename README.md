@@ -1,8 +1,5 @@
 # Notes on VReplication
 
-Copyright 2020 &copy; Vitess Authors
-
-
 ## Table Of Contents
 1. [Introduction](#)
     1. [Status](#introduction)
