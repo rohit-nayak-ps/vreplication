@@ -1,4 +1,4 @@
-# Notes on VReplication
+# A Rough Guide to Vitess VReplication
 
 ## Table Of Contents
 1. [Introduction](#)
@@ -13,7 +13,7 @@
     1. [Change Data Capture](./use-cases/change-data-capture.md)
 1. [Command Reference](./commands/commands.md)
 1. [TBD: Performance and Scalability](./misc/scalability.md)
-1. [Internals](./misc/internals.md)
+1. [Internals](./internals/internals.md)
 1. [Frequently Asked Questions](./misc/faq.md)
 
 ---

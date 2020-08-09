@@ -6,8 +6,6 @@
 
 Next:
 
-* Go over Vreplication Internals
-
 * Write VStream API internals (example will be the change data capture use case)
 
 * Related schema tables
