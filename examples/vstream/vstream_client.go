@@ -18,42 +18,44 @@ func main() {
 	vstreamCopy()
 }
 
-var vgtid_current_customerAllShards =  &binlogdatapb.VGtid{
-	ShardGtids: []*binlogdatapb.ShardGtid{{
-			Keyspace: "customer",
-			Shard:    "-80",
-			Gtid:     "current",
-  },{
-			Keyspace: "customer",
-			Shard:    "80-",
-			Gtid:     "current",
-	}},
-}
-
-var vgtid_copy_commerce =  &binlogdatapb.VGtid{
-	ShardGtids: []*binlogdatapb.ShardGtid{{
-			Keyspace: "customer",
-			Shard: "80-",
-			Gtid: "",
-  }},
-}
-
 func vstreamCurrent() {
+	vgtid :=  &binlogdatapb.VGtid{
+		ShardGtids: []*binlogdatapb.ShardGtid{{
+				Keyspace: "customer",
+				Shard:    "-80",
+				Gtid:     "current",
+	  },{
+				Keyspace: "customer",
+				Shard:    "80-",
+				Gtid:     "current",
+		}},
+	}
 	filter := &binlogdatapb.Filter{
 		Rules: []*binlogdatapb.Rule{{
 			Match: "/.*/",
 		}},
 	}
-	startVStream(vgtid_current_customerAllShards, filter)
+	startVStream(vgtid, filter)
 }
 
 func vstreamCopy() {
+	vgtid :=  &binlogdatapb.VGtid{
+		ShardGtids: []*binlogdatapb.ShardGtid{{
+				Keyspace: "customer",
+				Shard: "80-",
+				Gtid: "",
+	  },{
+				Keyspace: "customer",
+				Shard: "-80",
+				Gtid: "",
+	  }},
+	}
 	filter := &binlogdatapb.Filter{
 		Rules: []*binlogdatapb.Rule{{
-			Match: "/customer/",
+			Match: "/c.*/",
 		}},
 	}
-	startVStream(vgtid_copy_commerce, filter)
+	startVStream(vgtid, filter)
 }
 
 func startVStream(vgtid *binlogdatapb.VGtid, filter *binlogdatapb.Filter) {

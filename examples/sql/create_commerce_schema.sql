@@ -2,7 +2,7 @@ use commerce;
 drop table if exists product;
 drop table if exists customer;
 drop table if exists corder;
-
+drop database if exists _vt;
 create table product(
   sku varbinary(128),
   description varbinary(128),
