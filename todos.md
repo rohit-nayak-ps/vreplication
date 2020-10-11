@@ -1,6 +1,4 @@
 
-* Internal: Materialize
-
 * Example commands for all with explanation
 
 

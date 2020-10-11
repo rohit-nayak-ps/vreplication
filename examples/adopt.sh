@@ -44,9 +44,6 @@ echo ">>>>> Step 8. Run VDiff after inserting data into the customer keyspace"
 sleep 15
 mysql -h 127.0.0.1 -P 15306 -u msandbox --password=msandbox customer < sql/insert_commerce_data_after_switch.sql
 
-#//BUG: tables customer/corder not found in schema
-#exit
-
 vtctlclient VDiff commerce.commerce2customer_reverse
 
 echo "Steps for rolling back"

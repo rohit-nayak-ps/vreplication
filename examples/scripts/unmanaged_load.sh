@@ -30,6 +30,7 @@ vttablet \
 -db_filtered_password $DB_PASS \
 -db_repl_user $DB_USER \
 -db_repl_password $DB_PASS \
+-track_schema_versions=true \
  -vtctld_addr http://$hostname:$vtctld_web_port/ \
  -init_db_name_override test \
  -init_populate_metadata \
