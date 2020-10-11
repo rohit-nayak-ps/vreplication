@@ -7,7 +7,6 @@ import (
 
 func main() {
 	var o = &oplog.Options{
-		// "mongodb+srv://rohit:96bTn3cwmriT9tU@rohitmongo1.s3zbd.mongodb.net/sample_airbnb?retryWrites=true&w=majority",
 		// (e.g. mongodb://username:password@127.0.0.1:27017,127.0.0.1:27018/local?replicaSet=rs01&authSource=admin)
 		Addrs:      []string{"127.0.0.1"}, // replicaset host and port
 		Username:   "rohit", // admin db username
