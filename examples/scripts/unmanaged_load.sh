@@ -32,7 +32,7 @@ vttablet \
 -db_repl_password $DB_PASS \
 -track_schema_versions=true \
  -vtctld_addr http://$hostname:$vtctld_web_port/ \
- -init_db_name_override test \
+ -init_db_name_override prod-charlotte-1 \
  -init_populate_metadata \
  > $VTDATAROOT/vt_0000000100/vttablet.out 2>&1 &
 

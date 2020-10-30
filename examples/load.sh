@@ -33,10 +33,10 @@ movetables(){
   sleep 10
 
   $LVTCTL InitShardMaster -force load2/0 zone1-200
-
+exit
   sleep 2
   echo ">>>>>> Step 3. Calling MoveTables"
-  TABLE=c2
+  TABLE=Email
   WORKFLOW=mt
   SOURCE_KS=load1
   TARGET_KS=load2
