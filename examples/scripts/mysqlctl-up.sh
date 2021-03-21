@@ -3,7 +3,7 @@ source ./env.sh
 
 cell=${CELL:-'zone1'}
 uid=$TABLET_UID
-mysql_port=$[17000 + $uid]
+mysql_port=$[27000 + $uid]
 printf -v alias '%s-%010d' $cell $uid
 printf -v tablet_dir 'vt_%010d' $uid
 

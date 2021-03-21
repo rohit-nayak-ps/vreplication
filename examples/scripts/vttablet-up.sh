@@ -20,9 +20,9 @@ cell=${CELL:-'zone1'}
 keyspace=${KEYSPACE:-'test_keyspace'}
 shard=${SHARD:-'0'}
 uid=$TABLET_UID
-mysql_port=$[17000 + $uid]
-port=$[15000 + $uid]
-grpc_port=$[16000 + $uid]
+mysql_port=$[27000 + $uid]
+port=$[25000 + $uid]
+grpc_port=$[26000 + $uid]
 printf -v alias '%s-%010d' $cell $uid
 printf -v tablet_dir 'vt_%010d' $uid
 tablet_hostname=''
@@ -52,6 +52,7 @@ vttablet \
  -restore_from_backup \
  -port $port \
  -grpc_port $grpc_port \
+ -vreplication_heartbeat_update_interval 60 \ 
  -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
  -pid_file $VTDATAROOT/$tablet_dir/vttablet.pid \
  -vtctld_addr http://$hostname:$vtctld_web_port/ \

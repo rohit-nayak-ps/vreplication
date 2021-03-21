@@ -1,2 +1,2 @@
-rm -rf ~/vtdataroot/*
-pkill -9 -e -f $VTDATAROOT
+rm -rf ~/vtdataroot2/*
+pkill -9 -e -f ~/vtdataroot2

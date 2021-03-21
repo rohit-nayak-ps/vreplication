@@ -19,10 +19,10 @@
 source ./env.sh
 
 cell=${CELL:-'zone1'}
-web_port=15001
-grpc_port=15991
-mysql_server_port=15306
-mysql_server_socket_path="/tmp/mysql.sock"
+web_port=25001
+grpc_port=25991
+mysql_server_port=25306
+mysql_server_socket_path="/tmp/mysql2.sock"
 
 # Start vtgate.
 # shellcheck disable=SC2086

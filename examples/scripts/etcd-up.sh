@@ -6,9 +6,9 @@ export ETCDCTL_API=2
 # Check that etcd is not already running
 curl "http://${ETCD_SERVER}" > /dev/null 2>&1 && fail "etcd is already running. Exiting."
 
-etcd --enable-v2=true --data-dir "${VTDATAROOT}/etcd/"  --listen-client-urls "http://${ETCD_SERVER}" --advertise-client-urls "http://${ETCD_SERVER}" > "${VTDATAROOT}"/tmp/etcd.out 2>&1 &
+etcd --enable-v2=true --data-dir "${VTDATAROOT}/etcd2/"  --listen-client-urls "http://${ETCD_SERVER}" --advertise-client-urls "http://${ETCD_SERVER}" --listen-peer-urls "http://localhost:12380" > "${VTDATAROOT}"/tmp/etcd2.out 2>&1 &
 PID=$!
-echo $PID > "${VTDATAROOT}/tmp/etcd.pid"
+echo $PID > "${VTDATAROOT}/tmp/etcd2.pid"
 sleep 5
 
 echo "add /vitess/global"
@@ -29,5 +29,3 @@ vtctl $TOPOLOGY_FLAGS AddCellInfo \
 set -e
 
 echo "etcd start done..."
-
-
