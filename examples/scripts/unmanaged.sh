@@ -2,7 +2,7 @@ source env.sh
 mkdir -p $VTDATAROOT/vt_0000000100
 DB_USER=msandbox
 DB_PASS=msandbox
-DB_PORT=19327
+DB_PORT=21122
 vttablet \
  $TOPOLOGY_FLAGS \
  -logtostderr \
@@ -32,14 +32,18 @@ vttablet \
  -db_filtered_password $DB_PASS \
  -db_repl_user $DB_USER \
  -db_repl_password $DB_PASS \
- -vreplication_heartbeat_update_interval 60 \
+ -relay_log_max_size 10000000 \
+ -relay_log_max_items 50000 \
+ -vstream_packet_size 10000000 \
+ -grpc_max_message_size 100000000 \
  -vtctld_addr http://$hostname:$vtctld_web_port/ \
+ -vreplication_heartbeat_update_interval 1 \
  > $VTDATAROOT/vt_0000000100/vttablet.out 2>&1 &
 
 sleep 10
 
-vtctlclient InitShardMaster -force load1/0 zone1-100
-vtctlclient ApplyVSchema -vschema_file sql/vschema_load_initial.json load1
+$LVTCTL  InitShardPrimary -force load1/0 zone1-100
+$LVTCTL  ApplyVSchema -vschema_file sql/vschema_load_initial.json load1
 # create the schema
 #vtctlclient ApplySchema -sql-file sql/create_commerce_schema.sql commerce
 

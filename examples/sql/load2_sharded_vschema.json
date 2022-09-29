@@ -6,17 +6,21 @@
         }
     },
     "tables": {
-        "c2": {
+        "c1m": {
             "column_vindexes": [
                 {
-                    "column": "id",
+                    "column": "c1",
                     "name": "hash"
                 }
-            ],
-            "auto_increment": {
-                "column": "id",
-                "sequence": "c2_seq"
-            }
+            ]
+        },
+        "c10": {
+            "column_vindexes": [
+                {
+                    "column": "c1",
+                    "name": "hash"
+                }
+            ]
         }
     }
 }

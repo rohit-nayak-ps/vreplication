@@ -1,7 +1,7 @@
 
-spec_template="{\"workflow\": \"matXXX\",\"sourceKeyspace\": \"load1\",\"targetKeyspace\": \"load2\",\"tableSettings\": [{\"targetTable\": \"tXXX\",\"sourceExpression\": \"select * from c1m\",\"create_ddl\": \"create table tXXX(c1 bigint(20),val2 varchar(50) default null, primary key(c1))\"}]}"
+spec_template="{\"workflow\": \"matXXX\",\"sourceKeyspace\": \"load1\",\"targetKeyspace\": \"load1\",\"tableSettings\": [{\"targetTable\": \"tXXX\",\"sourceExpression\": \"select * from x\",\"create_ddl\": \"create table tXXX(id bigint, id2 bigint, primary key(id))\"}]}"
 
-for t in {319..400}
+for t in {1..1}
 do
     spec=${spec_template//XXX/$t}
     vtctlclient -server localhost:25999 -log_dir ${VTDATAROOT}/tmp Materialize  "$spec"

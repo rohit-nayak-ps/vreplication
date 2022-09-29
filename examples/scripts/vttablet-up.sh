@@ -33,10 +33,11 @@ if [[ "${uid: -1}" -gt 1 ]]; then
  tablet_type=rdonly
 fi
 
-echo "Starting vttablet for $alias..."
+echo "Starting vttablet2 for $alias..."
 # shellcheck disable=SC2086
+TOPOLOGY_FLAGS="-topo_implementation etcd2 -topo_global_server_address $ETCD_SERVER -topo_global_root /vitess/global"
 vttablet \
- $TOPOLOGY_FLAGS \
+ -topo_implementation etcd2 -topo_global_server_address $ETCD_SERVER -topo_global_root /vitess/global \
  -log_dir $VTDATAROOT/tmp \
  -log_queries_to_file $VTDATAROOT/tmp/$tablet_logfile \
  -tablet-path $alias \
@@ -45,18 +46,14 @@ vttablet \
  -init_shard $shard \
  -init_tablet_type $tablet_type \
  -health_check_interval 5s \
- -enable_semi_sync \
+ -enable_semi_sync=false \
  -enable_replication_reporter \
- -backup_storage_implementation file \
- -file_backup_storage_root $VTDATAROOT/backups \
- -restore_from_backup \
  -port $port \
  -grpc_port $grpc_port \
- -vreplication_heartbeat_update_interval 60 \ 
  -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
  -pid_file $VTDATAROOT/$tablet_dir/vttablet.pid \
  -vtctld_addr http://$hostname:$vtctld_web_port/ \
- > $VTDATAROOT/$tablet_dir/vttablet.out 2>&1 &
+> $VTDATAROOT/$tablet_dir/vttablet.out 2>&1 &
 
 # Block waiting for the tablet to be listening
 # Not the same as healthy
