@@ -1,0 +1,43 @@
+{
+  "sharded": true,
+  "vindexes": {
+    "hash": {
+      "type": "hash"
+    }
+  },
+  "tables": {
+     "bar_entry": {
+            "columnVindexes": [
+                {
+                    "column": "c",
+                    "name": "hash"
+                }
+            ]
+     },
+    "corder": {
+      "columnVindexes": [
+        {
+          "column": "customer_id",
+          "name": "hash"
+        }
+      ],
+      "autoIncrement": {
+        "column": "order_id",
+        "sequence": "order_seq"
+      }
+    },
+    "customer": {
+      "columnVindexes": [
+        {
+          "column": "customer_id",
+          "name": "hash"
+        }
+      ],
+      "autoIncrement": {
+        "column": "customer_id",
+        "sequence": "customer_seq"
+      }
+    }
+  }
+}
+
