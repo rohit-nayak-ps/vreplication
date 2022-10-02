@@ -1,0 +1,1 @@
+rm -f 14.0/*.out; go run do.go

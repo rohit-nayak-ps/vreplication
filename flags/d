@@ -1,0 +1,7 @@
+for f in ./14.0/*.txt 
+do 
+	f2="$(basename -- $f)"
+	read -p ">>>>> diff -w 14.0/$f2.out 15.0/$f2, press ENTER to continue"
+	diff -w 14.0/$f2.out 15.0/$f2
+	echo ">>>>> diff -w 14.0/$f2.out 15.0/$f2 DONE"
+done
