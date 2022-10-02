@@ -1,37 +1,113 @@
-Usage of vtexplain:
-      --allowed_tablet_types value                                       Specifies the tablet types this vtgate is allowed to route queries to
+Executes a cluster management command on the remote vtctld server.
+
+Usage:
+  vtctldclient [command]
+
+Available Commands:
+  AddCellInfo                 Registers a local topology service in a new cell by creating the CellInfo.
+  AddCellsAlias               Defines a group of cells that can be referenced by a single name (the alias).
+  ApplyRoutingRules           Applies the VSchema routing rules.
+  ApplySchema                 Applies the schema change to the specified keyspace on every primary, running in parallel on all shards. The changes are then propagated to replicas via replication.
+  ApplyVSchema                Applies the VTGate routing schema to the provided keyspace. Shows the result after application.
+  Backup                      Uses the BackupStorage service on the given tablet to create and store a new backup.
+  BackupShard                 Finds the most up-to-date REPLICA, RDONLY, or SPARE tablet in the given shard and uses the BackupStorage service on that tablet to create and store a new backup.
+  ChangeTabletType            Changes the db type for the specified tablet, if possible.
+  CreateKeyspace              Creates the specified keyspace in the topology.
+  CreateShard                 Creates the specified shard in the topology.
+  DeleteCellInfo              Deletes the CellInfo for the provided cell.
+  DeleteCellsAlias            Deletes the CellsAlias for the provided alias.
+  DeleteKeyspace              Deletes the specified keyspace from the topology.
+  DeleteShards                Deletes the specified shards from the topology.
+  DeleteSrvVSchema            Deletes the SrvVSchema object in the given cell.
+  DeleteTablets               Deletes tablet(s) from the topology.
+  EmergencyReparentShard      Reparents the shard to the new primary. Assumes the old primary is dead and not responding.
+  ExecuteFetchAsApp           Executes the given query as the App user on the remote tablet.
+  ExecuteFetchAsDBA           Executes the given query as the DBA user on the remote tablet.
+  ExecuteHook                 Runs the specified hook on the given tablet.
+  FindAllShardsInKeyspace     Returns a map of shard names to shard references for a given keyspace.
+  GetBackups                  Lists backups for the given shard.
+  GetCellInfo                 Gets the CellInfo object for the given cell.
+  GetCellInfoNames            Lists the names of all cells in the cluster.
+  GetCellsAliases             Gets all CellsAlias objects in the cluster.
+  GetKeyspace                 Returns information about the given keyspace from the topology.
+  GetKeyspaces                Returns information about every keyspace in the topology.
+  GetPermissions              Displays the permissions for a tablet.
+  GetRoutingRules             Displays the VSchema routing rules.
+  GetSchema                   Displays the full schema for a tablet, optionally restricted to the specified tables/views.
+  GetShard                    Returns information about a shard in the topology.
+  GetSrvKeyspaceNames         Outputs a JSON mapping of cell=>keyspace names served in that cell. Omit to query all cells.
+  GetSrvKeyspaces             Returns the SrvKeyspaces for the given keyspace in one or more cells.
+  GetSrvVSchema               Returns the SrvVSchema for the given cell.
+  GetSrvVSchemas              Returns the SrvVSchema for all cells, optionally filtered by the given cells.
+  GetTablet                   Outputs a JSON structure that contains information about the tablet.
+  GetTabletVersion            Print the version of a tablet from its debug vars.
+  GetTablets                  Looks up tablets according to filter criteria.
+  GetVSchema                  Prints a JSON representation of a keyspace's topo record.
+  GetWorkflows                Gets all vreplication workflows (Reshard, MoveTables, etc) in the given keyspace.
+  InitShardPrimary            Sets the initial primary for the shard.
+  LegacyVtctlCommand          Invoke a legacy vtctlclient command. Flag parsing is best effort.
+  PingTablet                  Checks that the specified tablet is awake and responding to RPCs. This command can be blocked by other in-flight operations.
+  PlannedReparentShard        Reparents the shard to a new primary, or away from an old primary. Both the old and new primaries must be up and running.
+  RebuildKeyspaceGraph        Rebuilds the serving data for the keyspace(s). This command may trigger an update to all connected clients.
+  RebuildVSchemaGraph         Rebuilds the cell-specific SrvVSchema from the global VSchema objects in the provided cells (or all cells if none provided).
+  RefreshState                Reloads the tablet record on the specified tablet.
+  RefreshStateByShard         Reloads the tablet record all tablets in the shard, optionally limited to the specified cells.
+  ReloadSchema                Reloads the schema on a remote tablet.
+  ReloadSchemaKeyspace        Reloads the schema on all tablets in a keyspace. This is done on a best-effort basis.
+  ReloadSchemaShard           Reloads the schema on all tablets in a shard. This is done on a best-effort basis.
+  RemoveBackup                Removes the given backup from the BackupStorage used by vtctld.
+  RemoveKeyspaceCell          Removes the specified cell from the Cells list for all shards in the specified keyspace (by calling RemoveShardCell on every shard). It also removes the SrvKeyspace for that keyspace in that cell.
+  RemoveShardCell             Remove the specified cell from the specified shard's Cells list.
+  ReparentTablet              Reparent a tablet to the current primary in the shard.
+  RestoreFromBackup           Stops mysqld on the specified tablet and restores the data from either the latest backup or closest before `backup-timestamp`.
+  RunHealthCheck              Runs a healthcheck on the remote tablet.
+  SetKeyspaceDurabilityPolicy Sets the durability-policy used by the specified keyspace.
+  SetShardIsPrimaryServing    Add or remove a shard from serving. This is meant as an emergency function. It does not rebuild any serving graphs; i.e. it does not run `RebuildKeyspaceGraph`.
+  SetShardTabletControl       Sets the TabletControl record for a shard and tablet type. Only use this for an emergency fix or after a finished MoveTables. The MigrateServedFrom and MigrateServedType commands set this record appropriately already.
+  SetWritable                 Sets the specified tablet as writable or read-only.
+  ShardReplicationFix         Walks through a ShardReplication object and fixes the first error encountered.
+  ShardReplicationPositions   
+  SleepTablet                 Blocks the action queue on the specified tablet for the specified amount of time. This is typically used for testing.
+  SourceShardAdd              Adds the SourceShard record with the provided index for emergencies only. It does not call RefreshState for the shard primary.
+  SourceShardDelete           Deletes the SourceShard record with the provided index. This should only be used for emergency cleanup. It does not call RefreshState for the shard primary.
+  StartReplication            Starts replication on the specified tablet.
+  StopReplication             Stops replication on the specified tablet.
+  TabletExternallyReparented  Updates the topology record for the tablet's shard to acknowledge that an external tool made this tablet the primary.
+  UpdateCellInfo              Updates the content of a CellInfo with the provided parameters, creating the CellInfo if it does not exist.
+  UpdateCellsAlias            Updates the content of a CellsAlias with the provided parameters, creating the CellsAlias if it does not exist.
+  Validate                    Validates that all nodes reachable from the global replication graph, as well as all tablets in discoverable cells, are consistent.
+  ValidateKeyspace            Validates that all nodes reachable from the specified keyspace are consistent.
+  ValidateSchemaKeyspace      Validates that the schema on the primary tablet for shard 0 matches the schema on all other tablets in the keyspace.
+  ValidateShard               Validates that all nodes reachable from the specified shard are consistent.
+  ValidateVersionKeyspace     Validates that the version on the primary tablet of shard 0 matches all of the other tablets in the keyspace.
+  help                        Help about any command
+
+Flags:
+      --action_timeout duration                                          timeout for the total command (default 1h0m0s)
+      --allowed_tablet_types TabletTypeList                              Specifies the tablet types this vtgate is allowed to route queries to
       --alsologtostderr                                                  log to standard error as well as files
       --app_idle_timeout duration                                        Idle timeout for app connections (default 1m0s)
       --app_pool_size int                                                Size of the connection pool for app connections (default 40)
-      --backup_engine_implementation string                              Specifies which implementation to use for creating new backups (builtin or xtrabackup). Restores will always be done with whichever engine created a given backup. (default builtin)
+      --backup_engine_implementation string                              Specifies which implementation to use for creating new backups (builtin or xtrabackup). Restores will always be done with whichever engine created a given backup. (default "builtin")
       --backup_storage_block_size int                                    if backup_storage_compress is true, backup_storage_block_size sets the byte size for each block while compressing (default is 250000). (default 250000)
       --backup_storage_compress                                          if set, the backup files will be compressed (default is true). Set to false for instance if a backup_storage_hook is specified and it compresses the data. (default true)
       --backup_storage_hook string                                       if set, we send the contents of the backup files through this hook.
       --backup_storage_implementation string                             which implementation to use for the backup storage feature
       --backup_storage_number_blocks int                                 if backup_storage_compress is true, backup_storage_number_blocks sets the number of blocks that can be processed, at once, before the writer blocks, during compression (default is 2). It should be equal to the number of CPUs available for compression (default 2)
-      --batch-interval duration                                          Interval between logical time slots. (default 10ms)
-      --binlog_player_protocol string                                    the protocol to download binlogs from a vttablet (default grpc)
+      --binlog_player_protocol string                                    the protocol to download binlogs from a vttablet (default "grpc")
       --binlog_use_v3_resharding_mode                                    (DEPRECATED) True if and only if the binlog streamer should use V3-style sharding, which doesn't require a preset sharding key column. (default true)
-      --buffer_drain_concurrency int                                     Maximum number of requests retried simultaneously. More concurrency will increase the load on the PRIMARY vttablet when draining the buffer. (default 1)
-      --buffer_implementation string                                     Allowed values: healthcheck (legacy implementation), keyspace_events (default) (default keyspace_events)
-      --buffer_keyspace_shards string                                    If not empty, limit buffering to these entries (comma separated). Entry format: keyspace or keyspace/shard. Requires --enable_buffer=true.
-      --buffer_max_failover_duration duration                            Stop buffering completely if a failover takes longer than this duration. (default 20s)
-      --buffer_min_time_between_failovers duration                       Minimum time between the end of a failover and the start of the next one (tracked per shard). Faster consecutive failovers will not trigger buffering. (default 1m0s)
-      --buffer_size int                                                  Maximum number of buffered requests in flight (across all ongoing failovers). (default 1000)
-      --buffer_window duration                                           Duration for how long a request should be buffered at most. (default 10s)
       --builtinbackup_mysqld_timeout duration                            how long to wait for mysqld to shutdown at the start of the backup (default 10m0s)
       --builtinbackup_progress duration                                  how often to send progress updates when backing up large files (default 5s)
       --catch-sigpipe                                                    catch and ignore SIGPIPE on stdout and stderr if specified
-      --cells_to_watch string                                            comma-separated list of cells for watching tablets
       --client-found-rows-pool-size int                                  DEPRECATED: queryserver-config-transaction-cap will be used instead.
       --cpu_profile string                                               deprecated: use '-pprof=cpu' instead
       --datadog-agent-host string                                        host to send spans to. if empty, no tracing will be done
       --datadog-agent-port string                                        port to send spans to. if empty, no tracing will be done
       --db-credentials-file string                                       db credentials file; send SIGHUP to reload this file
-      --db-credentials-server string                                     db credentials server type ('file' - file implementation; 'vault' - HashiCorp Vault implementation) (default file)
+      --db-credentials-server string                                     db credentials server type ('file' - file implementation; 'vault' - HashiCorp Vault implementation) (default "file")
       --db-credentials-vault-addr string                                 URL to Vault server
       --db-credentials-vault-path string                                 Vault path to credentials JSON blob, e.g.: secret/data/prod/dbcreds
-      --db-credentials-vault-role-mountpoint string                      Vault AppRole mountpoint; can also be passed using VAULT_MOUNTPOINT environment variable (default approle)
+      --db-credentials-vault-role-mountpoint string                      Vault AppRole mountpoint; can also be passed using VAULT_MOUNTPOINT environment variable (default "approle")
       --db-credentials-vault-role-secretidfile string                    Path to file containing Vault AppRole secret_id; can also be passed using VAULT_SECRETID environment variable
       --db-credentials-vault-roleid string                               Vault AppRole id; can also be passed using VAULT_ROLEID environment variable
       --db-credentials-vault-timeout duration                            Timeout for vault API operations (default 10s)
@@ -40,13 +116,8 @@ Usage of vtexplain:
       --db-credentials-vault-ttl duration                                How long to cache DB credentials from the Vault server (default 30m0s)
       --dba_idle_timeout duration                                        Idle timeout for dba connections (default 1m0s)
       --dba_pool_size int                                                Size of the connection pool for dba connections (default 20)
-      --dbddl_plugin string                                              controls how to handle CREATE/DROP DATABASE. use it if you are using your own database provisioning service (default fail)
-      --dbname string                                                    Optional database target to override normal routing
-      --ddl_strategy string                                              Set default strategy for DDL statements. Override with @@ddl_strategy session variable (default direct)
-      --default_tablet_type value                                        The default tablet type to set for queries, when one is not explicitly selected (default PRIMARY)
       --degraded_threshold duration                                      replication lag after which a replica is considered degraded (default 30s)
       --disable_active_reparents                                         if set, do not allow active reparents. Use this to protect a cluster using external reparents.
-      --disable_local_gateway                                            deprecated: if specified, this process will not route any queries to local tablets in the local cell
       --discovery_high_replication_lag_minimum_serving duration          the replication lag that is considered too high when applying the min_number_serving_vttablets threshold (default 2h0m0s)
       --discovery_low_replication_lag duration                           the replication lag that is considered low enough to be healthy (default 30s)
       --emit_stats                                                       If set, emit stats to push-based monitoring and stats backends
@@ -56,32 +127,17 @@ Usage of vtexplain:
       --enable-lag-throttler                                             Synonym to -enable_lag_throttler
       --enable-query-plan-field-caching                                  Synonym to -enable_query_plan_field_caching (default true)
       --enable-tx-throttler                                              Synonym to -enable_tx_throttler
-      --enable_buffer                                                    Enable buffering (stalling) of primary traffic during failovers.
-      --enable_buffer_dry_run                                            Detect and log failover events, but do not actually buffer requests.
       --enable_consolidator                                              This option enables the query consolidator. (default true)
       --enable_consolidator_replicas                                     This option enables the query consolidator only on replicas.
-      --enable_direct_ddl                                                Allow users to submit direct DDL statements (default true)
       --enable_hot_row_protection                                        If true, incoming transactions for the same row (range) will be queued and cannot consume all txpool slots.
       --enable_hot_row_protection_dry_run                                If true, hot row protection is not enforced but logs if transactions would have been queued.
       --enable_lag_throttler                                             If true, vttablet will run a throttler service, and will implicitly enable heartbeats
-      --enable_online_ddl                                                Allow users to submit, review and control Online DDL (default true)
       --enable_query_plan_field_caching                                  This option fetches & caches fields (columns) when storing query plans (default true)
       --enable_replication_reporter                                      Use polling to track replication lag.
-      --enable_set_var                                                   This will enable the use of MySQL's SET_VAR query hint for certain system variables instead of using reserved connections (default true)
-      --enable_system_settings                                           This will enable the system settings to be changed per session at the database connection level (default true)
       --enable_transaction_limit                                         If true, limit on number of transactions open at the same time will be enforced for all users. User trying to open a new transaction after exhausting their limit will receive an error immediately, regardless of whether there are available slots or not.
       --enable_transaction_limit_dry_run                                 If true, limit on number of transactions open at the same time will be tracked for all users, but not enforced.
       --enable_tx_throttler                                              If true replication-lag-based throttling on transactions will be enabled.
       --enforce_strict_trans_tables                                      If true, vttablet requires MySQL to run with STRICT_TRANS_TABLES or STRICT_ALL_TABLES on. It is recommended to not turn this flag off. Otherwise MySQL may alter your supplied values before saving them to the database. (default true)
-      --execution-mode string                                            The execution mode to simulate -- must be set to multi, legacy-autocommit, or twopc (default multi)
-      --foreign_key_mode string                                          This is to provide how to handle foreign key constraint in create/alter table. Valid values are: allow, disallow (default allow)
-      --gate_query_cache_lfu                                             gate server cache algorithm. when set to true, a new cache algorithm based on a TinyLFU admission policy will be used to improve cache behavior and prevent pollution from sparse queries (default true)
-      --gate_query_cache_memory int                                      gate server query cache size in bytes, maximum amount of memory to be cached. vtgate analyzes every incoming query and generate a query plan, these plans are being cached in a lru cache. This config controls the capacity of the lru cache. (default 33554432)
-      --gate_query_cache_size int                                        gate server query cache size, maximum number of queries to be cached. vtgate analyzes every incoming query and generate a query plan, these plans are being cached in a cache. This config controls the expected amount of unique entries in the cache. (default 5000)
-      --gateway_initial_tablet_timeout duration                          At startup, the tabletGateway will wait up to this duration to get at least one tablet per keyspace/shard/tablet type (default 30s)
-      --gc_check_interval duration                                       Interval between garbage collection checks (default 1h0m0s)
-      --gc_purge_check_interval duration                                 Interval between purge discovery checks (default 1m0s)
-      --gh-ost-path string                                               override default gh-ost binary full path
       --grpc_auth_mode string                                            Which auth plugin implementation to use (eg: static)
       --grpc_auth_mtls_allowed_substrings string                         List of substrings of at least one of the client certificate names (separated by colon).
       --grpc_auth_static_client_creds string                             when using grpc_static_auth in the server, this file provides the credentials to use to authenticate with server
@@ -108,82 +164,47 @@ Usage of vtexplain:
       --grpc_server_keepalive_enforcement_policy_min_time duration       gRPC server minimum keepalive time (default 10s)
       --grpc_server_keepalive_enforcement_policy_permit_without_stream   gRPC server permit client keepalive pings even when there are no active streams (RPCs)
       --health_check_interval duration                                   Interval between health checks (default 20s)
-      --healthcheck_retry_delay duration                                 health check retry delay (default 2ms)
-      --healthcheck_timeout duration                                     the health check timeout period (default 1m0s)
       --heartbeat_enable                                                 If true, vttablet records (if master) or checks (if replica) the current time of a replication heartbeat in the table _vt.heartbeat. The result is used to inform the serving state of the vttablet via healthchecks.
       --heartbeat_interval duration                                      How frequently to read and write replication heartbeat. (default 1s)
-      --heartbeat_on_demand_duration duration                            If non-zero, heartbeats are only written upon consumer request, and only run for up to given duration following the request. Frequent requests can keep the heartbeat running consistently; when requests are infrequent heartbeat may completely stop between requests
+      --heartbeat_on_demand_duration duration                            If non-zero, heartbeats are only written upon consumer request, and only run for up to given duration following the request. Frequent requests can keep the heartbeat running consistently; when requests are infrequent heartbeat may completely stop between requests (default 0s)
+  -h, --help                                                             help for vtctldclient
       --hot_row_protection_concurrent_transactions int                   Number of concurrent transactions let through to the txpool/MySQL for the same hot row. Should be > 1 to have enough 'ready' transactions in MySQL and benefit from a pipelining effect. (default 5)
       --hot_row_protection_max_global_queue_size int                     Global queue limit across all row (ranges). Useful to prevent that the queue can grow unbounded. (default 1000)
       --hot_row_protection_max_queue_size int                            Maximum number of BeginExecute RPCs which will be queued for the same row (range). (default 20)
       --jaeger-agent-host string                                         host and port to send spans to. if empty, no tracing will be done
-      --keep_logs duration                                               keep logs for this long (using ctime) (zero to keep forever)
-      --keep_logs_by_mtime duration                                      keep logs for this long (using mtime) (zero to keep forever)
-      --keyspaces_to_watch value                                         Specifies which keyspaces this vtgate should have access to while routing queries or accessing the vschema
-      --ks-shard-map string                                              JSON map of keyspace name -> shard name -> ShardReference object. The inner map is the same as the output of FindAllShardsInKeyspace
-      --ks-shard-map-file string                                         File containing json blob of keyspace name -> shard name -> ShardReference object
+      --keep_logs duration                                               keep logs for this long (using ctime) (zero to keep forever) (default 0s)
+      --keep_logs_by_mtime duration                                      keep logs for this long (using mtime) (zero to keep forever) (default 0s)
+      --keyspaces_to_watch StringList                                    Specifies which keyspaces this vtgate should have access to while routing queries or accessing the vschema
       --lameduck-period duration                                         keep running at least this long after SIGTERM before stopping (default 50ms)
       --legacy_replication_lag_algorithm                                 use the legacy algorithm when selecting the vttablets for serving (default true)
-      --lock_heartbeat_time duration                                     If there is lock function used. This will keep the lock connection active by using this heartbeat (default 5s)
-      --log_backtrace_at value                                           when logging hits line file:N, emit a stack trace
+      --log_backtrace_at traceLocation                                   when logging hits line file:N, emit a stack trace (default :0)
       --log_dir string                                                   If non-empty, write log files in this directory
       --log_err_stacks                                                   log stack traces for errors
-      --log_queries_to_file string                                       Enable query logging to the specified file
       --log_rotate_max_size uint                                         size in bytes at which logs are rotated (glog.MaxSize) (default 1887436800)
       --logtostderr                                                      log to standard error instead of files
       --master_connect_retry duration                                    Deprecated, use -replication_connect_retry (default 10s)
-      --max_memory_rows int                                              Maximum number of rows that will be held in memory for intermediate results as well as the final result. (default 300000)
-      --max_payload_size int                                             The threshold for query payloads in bytes. A payload greater than this threshold will result in a failure to handle the query.
       --mem-profile-rate int                                             deprecated: use '-pprof=mem' instead (default 524288)
-      --message_stream_grace_period duration                             the amount of time to give for a vttablet to resume if it ends a message stream, usually because of a reparent. (default 30s)
-      --migration_check_interval duration                                Interval between migration checks (default 1m0s)
       --min_number_serving_vttablets int                                 the minimum number of vttablets for each replicating tablet_type (e.g. replica, rdonly) that will be continue to be used even with replication lag above discovery_low_replication_lag, but still below discovery_high_replication_lag_minimum_serving (default 2)
       --mutex-profile-fraction int                                       deprecated: use '-pprof=mutex' instead
-      --mysql_allow_clear_text_without_tls                               If set, the server will allow the use of a clear text password over non-SSL connections.
-      --mysql_auth_server_impl string                                    Which auth server implementation to use. Options: none, ldap, clientcert, static, vault. (default static)
       --mysql_auth_server_static_file string                             JSON File to read the users/passwords from.
       --mysql_auth_server_static_string string                           JSON representation of the users/passwords config.
-      --mysql_auth_static_reload_interval duration                       Ticker to reload credentials
-      --mysql_clientcert_auth_method string                              client-side authentication method to use. Supported values: mysql_clear_password, dialog. (default mysql_clear_password)
-      --mysql_default_workload string                                    Default session workload (OLTP, OLAP, DBA) (default OLTP)
-      --mysql_server_bind_address string                                 Binds on this address when listening to MySQL binary protocol. Useful to restrict listening to 'localhost' only for instance.
+      --mysql_auth_static_reload_interval duration                       Ticker to reload credentials (default 0s)
+      --mysql_clientcert_auth_method string                              client-side authentication method to use. Supported values: mysql_clear_password, dialog. (default "mysql_clear_password")
       --mysql_server_flush_delay duration                                Delay after which buffered response will be flushed to the client. (default 100ms)
-      --mysql_server_port int                                            If set, also listen for MySQL binary protocol connections on this port. (default -1)
-      --mysql_server_query_timeout duration                              mysql query timeout
-      --mysql_server_read_timeout duration                               connection read timeout
-      --mysql_server_require_secure_transport                            Reject insecure connections but only if mysql_server_ssl_cert and mysql_server_ssl_key are provided
-      --mysql_server_socket_path string                                  This option specifies the Unix socket file to use when listening for local connections. By default it will be empty and it won't listen to a unix socket
-      --mysql_server_ssl_ca string                                       Path to ssl CA for mysql server plugin SSL. If specified, server will require and validate client certs.
-      --mysql_server_ssl_cert string                                     Path to the ssl cert for mysql server plugin SSL
-      --mysql_server_ssl_crl string                                      Path to ssl CRL for mysql server plugin SSL
-      --mysql_server_ssl_key string                                      Path to ssl key for mysql server plugin SSL
-      --mysql_server_ssl_server_ca string                                path to server CA in PEM format, which will be combine with server cert, return full certificate chain to clients
-      --mysql_server_tls_min_version string                              Configures the minimal TLS version negotiated when SSL is enabled. Defaults to TLSv1.2. Options: TLSv1.0, TLSv1.1, TLSv1.2, TLSv1.3.
       --mysql_server_version string                                      MySQL server version to advertise.
-      --mysql_server_write_timeout duration                              connection write timeout
-      --mysql_slow_connect_warn_threshold duration                       Warn if it takes more than the given threshold for a mysql connection to establish
-      --mysql_tcp_version string                                         Select tcp, tcp4, or tcp6 to control the socket type. (default tcp)
-      --mysqlctl_client_protocol string                                  the protocol to use to talk to the mysqlctl server (default grpc)
+      --mysqlctl_client_protocol string                                  the protocol to use to talk to the mysqlctl server (default "grpc")
       --mysqlctl_mycnf_template string                                   template file to use for generating the my.cnf file during server init
       --mysqlctl_socket string                                           socket file to use for remote mysqlctl actions (empty for local actions)
-      --no_scatter                                                       when set to true, the planner will fail instead of producing a plan that includes scatter queries
-      --normalize                                                        Whether to enable vtgate normalization
-      --normalize_queries                                                Rewrite queries with bind vars. Turn this off if the app itself sends normalized queries with bind vars. (default true)
       --onclose_timeout duration                                         wait no more than this for OnClose handlers before stopping (default 1ns)
       --onterm_timeout duration                                          wait no more than this for OnTermSync handlers before stopping (default 10s)
-      --output-mode string                                               Output in human-friendly text or json (default text)
       --pid_file string                                                  If set, the process will write its pid to the named file, and delete it on graceful shutdown.
-      --planner-version string                                           Sets the query planner version to use when generating the explain output. Valid values are V3 and Gen4
-      --planner_version string                                           Deprecated flag. Use planner-version instead
       --pool-name-prefix string                                          Deprecated
-      --pool_hostname_resolve_interval duration                          if set force an update to all hostnames and reconnect if changed, defaults to 0 (disabled)
+      --pool_hostname_resolve_interval duration                          if set force an update to all hostnames and reconnect if changed, defaults to 0 (disabled) (default 0s)
       --pprof string                                                     enable profiling
-      --proxy_protocol                                                   Enable HAProxy PROXY protocol on MySQL listener socket
-      --pt-osc-path string                                               override default pt-online-schema-change binary full path
       --purge_logs_interval duration                                     how often try to remove old logs (default 1h0m0s)
-      --query-log-stream-handler string                                  URL handler for streaming queries log (default /debug/querylog)
+      --query-log-stream-handler string                                  URL handler for streaming queries log (default "/debug/querylog")
       --querylog-filter-tag string                                       string that must be present in the query for it to be logged; if using a value as the tag, you need to disable query normalization
-      --querylog-format string                                           format for query logs ("text" or "json") (default text)
+      --querylog-format string                                           format for query logs ("text" or "json") (default "text")
       --querylog-row-threshold uint                                      Number of rows a query has to return or affect before being logged; not useful for streaming queries. 0 means all queries will be logged.
       --queryserver-config-acl-exempt-acl string                         an acl that exempt from table acl checking (this acl is free to access any vitess tables).
       --queryserver-config-allowunsafe-dmls                              deprecated
@@ -225,22 +246,13 @@ Usage of vtexplain:
       --relay_log_max_items int                                          Maximum number of rows for VReplication target buffering. (default 5000)
       --relay_log_max_size int                                           Maximum buffer size (in bytes) for VReplication target buffering. If single rows are larger than this, a single row is buffered at a time. (default 250000)
       --remote_operation_timeout duration                                time to wait for a remote operation (default 30s)
-      --replication-mode string                                          The replication mode to simulate -- must be set to either ROW or STATEMENT (default ROW)
       --replication_connect_retry duration                               how long to wait in between replica reconnect attempts. Only precise to the second. (default 10s)
-      --retain_online_ddl_tables duration                                How long should vttablet keep an old migrated table before purging it (default 24h0m0s)
-      --retry-count int                                                  retry count (default 2)
       --sanitize_log_messages                                            Remove potentially sensitive information in tablet INFO, WARNING, and ERROR log messages such as query parameters.
-      --schema string                                                    The SQL table schema
-      --schema-file string                                               Identifies the file that contains the SQL table schema
-      --schema_change_signal                                             Enable the schema tracker; requires queryserver-config-schema-change-signal to be enabled on the underlying vttablets for this to work (default true)
-      --schema_change_signal_user string                                 User to be used to send down query to vttablet to retrieve schema changes
       --security_policy string                                           the name of a registered security policy to use for controlling access to URLs - empty means allow all for anyone (built-in policies: deny-all, read-only)
-      --service_map value                                                comma separated list of services to enable (or disable if prefixed with '-') Example: grpc-vtworker
-      --serving_state_grace_period duration                              how long to pause after broadcasting health to vtgate, before enforcing a new serving state
-      --shards int                                                       Number of shards per keyspace. Passing --ks-shard-map/--ks-shard-map-file causes this flag to be ignored. (default 2)
+      --server string                                                    server to use for connection (required)
+      --service_map StringList                                           comma separated list of services to enable (or disable if prefixed with '-') Example: grpc-vtworker
+      --serving_state_grace_period duration                              how long to pause after broadcasting health to vtgate, before enforcing a new serving state (default 0s)
       --shutdown_grace_period float                                      how long to wait (in seconds) for queries and transactions to complete during graceful shutdown.
-      --sql string                                                       A list of semicolon-delimited SQL commands to analyze
-      --sql-file string                                                  Identifies the file that contains the SQL commands to analyze
       --sql-max-length-errors int                                        truncate queries in error logs to the given length (default unlimited)
       --sql-max-length-ui int                                            truncate queries in debug UIs to the given length (default 512) (default 512)
       --srv_topo_cache_refresh duration                                  how frequently to refresh the topology for cached entries (default 1s)
@@ -251,74 +263,46 @@ Usage of vtexplain:
       --stats_common_tags string                                         Comma-separated list of common tags for the stats backend. It provides both label and values. Example: label1:value1,label2:value2
       --stats_drop_variables string                                      Variables to be dropped from the list of exported variables.
       --stats_emit_period duration                                       Interval between emitting stats to all registered backends (default 1m0s)
-      --stderrthreshold value                                            logs at or above this threshold go to stderr (default 1)
-      --stream_buffer_size int                                           the number of bytes sent from vtgate for each stream call. It's recommended to keep this value in sync with vttablet's query-server-config-stream-buffer-size. (default 32768)
-      --stream_health_buffer_size uint                                   max streaming health entries to buffer per streaming health client (default 20)
-      --table_gc_lifecycle string                                        States for a DROP TABLE garbage collection cycle. Default is 'hold,purge,evac,drop', use any subset ('drop' implcitly always included) (default hold,purge,evac,drop)
+      --stderrthreshold severity                                         logs at or above this threshold go to stderr (default 1)
       --tablet_dir string                                                The directory within the vtdataroot to store vttablet/mysql files. Defaults to being generated by the tablet uid.
-      --tablet_filters value                                             Specifies a comma-separated list of 'keyspace|shard_name or keyrange' values to filter the tablets to watch
-      --tablet_manager_protocol string                                   the protocol to use to talk to vttablet (default grpc)
-      --tablet_protocol string                                           how to talk to the vttablets (default grpc)
+      --tablet_filters StringList                                        Specifies a comma-separated list of 'keyspace|shard_name or keyrange' values to filter the tablets to watch
+      --tablet_manager_protocol string                                   the protocol to use to talk to vttablet (default "grpc")
+      --tablet_protocol string                                           how to talk to the vttablets (default "grpc")
       --tablet_refresh_interval duration                                 tablet refresh interval (default 1m0s)
       --tablet_refresh_known_tablets                                     tablet refresh reloads the tablet address/port map from topo in case it changes (default true)
-      --tablet_url_template string                                       format string describing debug tablet url formatting. See the Go code for getTabletDebugURL() how to customize this. (default http://{{.GetTabletHostPort}})
+      --tablet_url_template string                                       format string describing debug tablet url formatting. See the Go code for getTabletDebugURL() how to customize this. (default "http://{{.GetTabletHostPort}}")
       --throttle_check_as_check_self                                     Should throttler/check return a throttler/check-self result (changes throttler behavior for writes)
       --throttle_metrics_query SELECT                                    Override default heartbeat/lag metric. Use either SELECT (must return single row, single value) or `SHOW GLOBAL ... LIKE ...` queries. Set -throttle_metrics_threshold respectively.
       --throttle_metrics_threshold float                                 Override default throttle threshold, respective to -throttle_metrics_query (default 1.7976931348623157e+308)
-      --throttle_tablet_types string                                     Comma separated VTTablet types to be considered by the throttler. default: 'replica'. example: 'replica,rdonly'. 'replica' aways implicitly included (default replica)
+      --throttle_tablet_types string                                     Comma separated VTTablet types to be considered by the throttler. default: 'replica'. example: 'replica,rdonly'. 'replica' aways implicitly included (default "replica")
       --throttle_threshold duration                                      Replication lag threshold for default lag throttling (default 1s)
       --topo_global_root string                                          the path of the global topology data in the global topology server
       --topo_global_server_address string                                the address of the global topology server
       --topo_implementation string                                       the topology implementation to use
       --topo_read_concurrency int                                        concurrent topo reads (default 32)
-      --tracer string                                                    tracing service to use (default noop)
+      --tracer string                                                    tracing service to use (default "noop")
       --tracing-enable-logging                                           whether to enable logging in the tracing service
-      --tracing-sampling-rate value                                      sampling rate for the probabilistic jaeger sampler (default 0.1)
-      --tracing-sampling-type value                                      sampling strategy to use for jaeger. possible values are 'const', 'probabilistic', 'rateLimiting', or 'remote' (default const)
+      --tracing-sampling-rate OptionalFloat64                            sampling rate for the probabilistic jaeger sampler (default 0.1)
+      --tracing-sampling-type OptionalString                             sampling strategy to use for jaeger. possible values are 'const', 'probabilistic', 'rateLimiting', or 'remote' (default const)
       --track_schema_versions                                            When enabled, vttablet will store versions of schemas at each position that a DDL is applied and allow retrieval of the schema corresponding to a position
-      --transaction-log-stream-handler string                            URL handler for streaming transactions log (default /debug/txlog)
+      --transaction-log-stream-handler string                            URL handler for streaming transactions log (default "/debug/txlog")
       --transaction_limit_by_component                                   Include CallerID.component when considering who the user is for the purpose of transaction limit.
       --transaction_limit_by_principal                                   Include CallerID.principal when considering who the user is for the purpose of transaction limit. (default true)
       --transaction_limit_by_subcomponent                                Include CallerID.subcomponent when considering who the user is for the purpose of transaction limit.
       --transaction_limit_by_username                                    Include VTGateCallerID.username when considering who the user is for the purpose of transaction limit. (default true)
       --transaction_limit_per_user float                                 Maximum number of transactions a single user is allowed to use at any time, represented as fraction of -transaction_cap. (default 0.4)
-      --transaction_mode string                                          SINGLE: disallow multi-db transactions, MULTI: allow multi-db transactions with best effort commit, TWOPC: allow multi-db transactions with 2pc commit (default MULTI)
       --transaction_shutdown_grace_period float                          DEPRECATED: use shutdown_grace_period instead.
       --twopc_abandon_age float                                          time in seconds. Any unresolved transaction older than this time will be sent to the coordinator to be resolved.
       --twopc_coordinator_address string                                 address of the (VTGate) process(es) that will be used to notify of abandoned transactions.
       --twopc_enable                                                     if the flag is on, 2pc is enabled. Other 2pc flags must be supplied.
-      --tx-throttler-config string                                       Synonym to -tx_throttler_config (default target_replication_lag_sec: 2
-max_replication_lag_sec: 10
-initial_rate: 100
-max_increase: 1
-emergency_decrease: 0.5
-min_duration_between_increases_sec: 40
-max_duration_between_increases_sec: 62
-min_duration_between_decreases_sec: 20
-spread_backlog_across_sec: 20
-age_bad_rate_after_sec: 180
-bad_rate_increase: 0.1
-max_rate_approach_threshold: 0.9
-)
-      --tx-throttler-healthcheck-cells value                             Synonym to -tx_throttler_healthcheck_cells
-      --tx_throttler_config string                                       The configuration of the transaction throttler as a text formatted throttlerdata.Configuration protocol buffer message (default target_replication_lag_sec: 2
-max_replication_lag_sec: 10
-initial_rate: 100
-max_increase: 1
-emergency_decrease: 0.5
-min_duration_between_increases_sec: 40
-max_duration_between_increases_sec: 62
-min_duration_between_decreases_sec: 20
-spread_backlog_across_sec: 20
-age_bad_rate_after_sec: 180
-bad_rate_increase: 0.1
-max_rate_approach_threshold: 0.9
-)
-      --tx_throttler_healthcheck_cells value                             A comma-separated list of cells. Only tabletservers running in these cells will be monitored for replication lag by the transaction throttler.
+      --tx-throttler-config string                                       Synonym to -tx_throttler_config (default "target_replication_lag_sec: 2\nmax_replication_lag_sec: 10\ninitial_rate: 100\nmax_increase: 1\nemergency_decrease: 0.5\nmin_duration_between_increases_sec: 40\nmax_duration_between_increases_sec: 62\nmin_duration_between_decreases_sec: 20\nspread_backlog_across_sec: 20\nage_bad_rate_after_sec: 180\nbad_rate_increase: 0.1\nmax_rate_approach_threshold: 0.9\n")
+      --tx-throttler-healthcheck-cells StringList                        Synonym to -tx_throttler_healthcheck_cells
+      --tx_throttler_config string                                       The configuration of the transaction throttler as a text formatted throttlerdata.Configuration protocol buffer message (default "target_replication_lag_sec: 2\nmax_replication_lag_sec: 10\ninitial_rate: 100\nmax_increase: 1\nemergency_decrease: 0.5\nmin_duration_between_increases_sec: 40\nmax_duration_between_increases_sec: 62\nmin_duration_between_decreases_sec: 20\nspread_backlog_across_sec: 20\nage_bad_rate_after_sec: 180\nbad_rate_increase: 0.1\nmax_rate_approach_threshold: 0.9\n")
+      --tx_throttler_healthcheck_cells StringList                        A comma-separated list of cells. Only tabletservers running in these cells will be monitored for replication lag by the transaction throttler.
       --unhealthy_threshold duration                                     replication lag after which a replica is considered unhealthy (default 2h0m0s)
-      --v value                                                          log level for V logs
+  -v, --v Level                                                          log level for V logs
       --version                                                          print binary version
-      --vmodule value                                                    comma-separated list of pattern=N settings for file-filtered logging
+      --vmodule moduleSpec                                               comma-separated list of pattern=N settings for file-filtered logging
       --vreplication_copy_phase_duration duration                        Duration for each copy phase loop (before running the next catchup: default 1h) (default 1h0m0s)
       --vreplication_copy_phase_max_innodb_history_list_length int       The maximum InnoDB transaction history that can exist on a vstreamer (source) before starting another round of copying rows. This helps to limit the impact on the source tablet. (default 1000000)
       --vreplication_copy_phase_max_mysql_replication_lag int            The maximum MySQL replication lag (in seconds) that can exist on a vstreamer (source) before starting another round of copying rows. This helps to limit the impact on the source tablet. (default 43200)
@@ -331,23 +315,25 @@ max_rate_approach_threshold: 0.9
       --vreplication_replica_lag_tolerance duration                      Replica lag threshold duration: once lag is below this we switch from copy phase to the replication (streaming) phase (default 1m0s)
       --vreplication_retry_delay duration                                delay before retrying a failed workflow event in the replication phase (default 5s)
       --vreplication_store_compressed_gtid                               Store compressed gtids in the pos column of _vt.vreplication
-      --vreplication_tablet_type string                                  comma separated list of tablet types used as a source (default in_order:REPLICA,PRIMARY)
-      --vschema string                                                   Identifies the VTGate routing schema
-      --vschema-file string                                              Identifies the VTGate routing schema file
-      --vschema_ddl_authorized_users string                              List of users authorized to execute vschema ddl operations, or '%' to allow all users.
+      --vreplication_tablet_type string                                  comma separated list of tablet types used as a source (default "in_order:REPLICA,PRIMARY")
       --vstream_dynamic_packet_size                                      Enable dynamic packet sizing for VReplication. This will adjust the packet size during replication to improve performance. (default true)
       --vstream_packet_size int                                          Suggested packet size for VReplication streamer. This is used only as a recommendation. The actual packet size may be more or less than this amount. (default 250000)
-      --vtgate-config-terse-errors                                       prevent bind vars from escaping in returned errors
-      --vtgate_protocol string                                           how to talk to vtgate (default grpc)
-      --warn_memory_rows int                                             Warning threshold for in-memory results. A row count higher than this amount will cause the VtGateWarnings.ResultsExceeded counter to be incremented. (default 30000)
-      --warn_payload_size int                                            The warning threshold for query payloads in bytes. A payload greater than this threshold will cause the VtGateWarnings.WarnPayloadSizeExceeded counter to be incremented.
-      --warn_sharded_only                                                If any features that are only available in unsharded mode are used, query execution warnings will be added to the session
+      --vtctl_client_protocol string                                     the protocol to use to talk to the vtctl server (default "grpc")
+      --vtctld_grpc_ca string                                            the server ca to use to validate servers when connecting
+      --vtctld_grpc_cert string                                          the cert to use to connect
+      --vtctld_grpc_crl string                                           the server crl to use to validate server certificates when connecting
+      --vtctld_grpc_key string                                           the key to use to connect
+      --vtctld_grpc_server_name string                                   the server name to use to validate server certificate
+      --wait_for_drain_sleep_rdonly duration                             (DEPRECATED) time to wait before shutting the query service on old RDONLY tablets during MigrateServedTypes (default 5s)
+      --wait_for_drain_sleep_replica duration                            (DEPRECATED) time to wait before shutting the query service on old REPLICA tablets during MigrateServedTypes (default 15s)
       --watch_replication_stream                                         When enabled, vttablet will stream the MySQL replication stream from the local server, and use it to update schema when it sees a DDL.
       --xbstream_restore_flags string                                    flags to pass to xbstream command during restore. These should be space separated and will be added to the end of the command. These need to match the ones used for backup e.g. --compress / --decompress, --encrypt / --decrypt
       --xtrabackup_backup_flags string                                   flags to pass to backup command. These should be space separated and will be added to the end of the command
       --xtrabackup_prepare_flags string                                  flags to pass to prepare command. These should be space separated and will be added to the end of the command
       --xtrabackup_root_path string                                      directory location of the xtrabackup and xbstream executables, e.g., /usr/bin
-      --xtrabackup_stream_mode string                                    which mode to use if streaming, valid values are tar and xbstream (default tar)
+      --xtrabackup_stream_mode string                                    which mode to use if streaming, valid values are tar and xbstream (default "tar")
       --xtrabackup_stripe_block_size uint                                Size in bytes of each block that gets sent to a given stripe before rotating to the next stripe (default 102400)
       --xtrabackup_stripes uint                                          If greater than 0, use data striping across this many destination files to parallelize data transfer and decompression
       --xtrabackup_user string                                           User that xtrabackup will use to connect to the database server. This user must have all necessary privileges. For details, please refer to xtrabackup documentation.
+
+Use "vtctldclient [command] --help" for more information about a command.
