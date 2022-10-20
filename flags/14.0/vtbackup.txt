@@ -9,7 +9,6 @@ Usage of vtbackup:
       --backup_engine_implementation string             Specifies which implementation to use for creating new backups (builtin or xtrabackup). Restores will always be done with whichever engine created a given backup. (default "builtin")
       --backup_storage_block_size int                   if backup_storage_compress is true, backup_storage_block_size sets the byte size for each block while compressing (default is 250000). (default 250000)
       --backup_storage_compress                         if set, the backup files will be compressed (default is true). Set to false for instance if a backup_storage_hook is specified and it compresses the data. (default true)
-      --backup_storage_hook string                      if set, we send the contents of the backup files through this hook.
       --backup_storage_implementation string            Which backup storage implementation to use for creating and restoring backups.
       --backup_storage_number_blocks int                if backup_storage_compress is true, backup_storage_number_blocks sets the number of blocks that can be processed, at once, before the writer blocks, during compression (default is 2). It should be equal to the number of CPUs available for compression. (default 2)
       --ceph_backup_storage_config string               Path to JSON config file for ceph backup storage. (default "ceph_backup_config.json")
@@ -163,8 +162,8 @@ Usage of vtbackup:
       --topo_zk_tls_ca string                           the server ca to use to validate servers when connecting to the zk topo server
       --topo_zk_tls_cert string                         the cert to use to connect to the zk topo server, requires topo_zk_tls_key, enables TLS
       --topo_zk_tls_key string                          the key to use to connect to the zk topo server, enables TLS
-  -v, --v Level                                         log level for V logs
-      --version                                         print binary version
+      --v Level                                         log level for V logs
+  -v, --version                                         print binary version
       --vmodule moduleSpec                              comma-separated list of pattern=N settings for file-filtered logging
       --xbstream_restore_flags string                   flags to pass to xbstream command during restore. These should be space separated and will be added to the end of the command. These need to match the ones used for backup e.g. --compress / --decompress, --encrypt / --decrypt
       --xtrabackup_backup_flags string                  flags to pass to backup command. These should be space separated and will be added to the end of the command
