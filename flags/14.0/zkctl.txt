@@ -1,5 +1,4 @@
-Usage of vtaclcheck:
-      --acl-file string                  The path of the JSON ACL file to check
+Usage of zkctl:
       --alsologtostderr                  log to standard error as well as files
   -h, --help                             display usage and exit
       --keep_logs duration               keep logs for this long (using ctime) (zero to keep forever)
@@ -11,9 +10,9 @@ Usage of vtaclcheck:
       --logtostderr                      log to standard error instead of files
       --pprof strings                    enable profiling
       --purge_logs_interval duration     how often try to remove old logs (default 1h0m0s)
-      --security_policy string           the name of a registered security policy to use for controlling access to URLs - empty means allow all for anyone (built-in policies: deny-all, read-only)
-      --static-auth-file string          The path of the auth_server_static JSON file to check
       --stderrthreshold severity         logs at or above this threshold go to stderr (default 1)
       --v Level                          log level for V logs
   -v, --version                          print binary version
       --vmodule moduleSpec               comma-separated list of pattern=N settings for file-filtered logging
+      --zk.cfg string                    zkid@server1:leaderPort1:electionPort1:clientPort1,...) (default "6@<hostname>:3801:3802:3803")
+      --zk.myid uint                     which server do you want to be? only needed when running multiple instance on one box, otherwise myid is implied by hostname
